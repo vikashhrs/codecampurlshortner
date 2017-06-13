@@ -5,7 +5,7 @@ var request = require('request');
 var app = express();
 
 
-mongoose.connect('mongodb://localhost/urlshortner');
+mongoose.connect('mongodb://ikashhrs:12345@ds125262.mlab.com:25262/urlshortner');
 
 
 var PORT = process.env.PORT || 3000;
