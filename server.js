@@ -28,7 +28,9 @@ app.get('/new/:url*',function(req,res){
 	console.log(process.env.APP_URL);
 	var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
 	var rootUrl = fullUrl.substring(0,fullUrl.indexOf("new"));
-	Url.findOne({original_url : url},function(err,foundUrl){
+	
+	if(validateURL(url)){
+		Url.findOne({original_url : url},function(err,foundUrl){
 		if(err)
 			throw error
 		if(foundUrl){
@@ -45,14 +47,14 @@ app.get('/new/:url*',function(req,res){
 					console.log(url + "sdsdsdsd")
 					var urlList = urlsFound.map((eachurl) => {
 		       			 return eachurl.short_url;
-					});
+				});
 
-					var newLink;
+				var newLink;
 		      
-		      		do {
-				        // Generates random four digit number for link
-				        var num = Math.floor(100000 + Math.random() * 900000);
-				        newLink = rootUrl + num.toString().substring(0, 4);
+		      	do {
+			        // Generates random four digit number for link
+			        var num = Math.floor(100000 + Math.random() * 900000);
+			        newLink = rootUrl + num.toString().substring(0, 4);
 					} while (urlList.indexOf(newLink) != -1);
 
 					var urlpiece = new Url({original_url : url,short_url : newLink});
@@ -82,7 +84,10 @@ app.get('/new/:url*',function(req,res){
 			})
 		}
 	})
-	
+
+	}else{
+		res.status(404).send({message : "Invalid url"});
+	}
 
 });
 
